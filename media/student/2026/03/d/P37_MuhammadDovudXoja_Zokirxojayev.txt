@@ -1,0 +1,138 @@
+
+1-misol
+
+# employees = [
+#     {
+#         "id": 1,
+#         "name": "Botir",
+#         "birth_date": "1990-07-15"
+#     },
+#     {
+#         "id": 2,
+#         "name": "Gayrat",
+#         "birth_date": "2000-05-12"
+#     },
+#     {
+#         "id": 3,
+#         "name": "Gaylord",
+#         "birth_date": "2009-07-19"
+#     }
+# ]
+# new_employees = []
+# for i in employees:
+#     birth_date = i["birth_date"]
+#     birth = datetime.strptime(birth_date, "%Y-%m-%d")
+#     new_employees.append(birth.month)
+#
+# new_employees.sort()
+# maxi = 0
+# maxx = ''
+# for i, j in groupby(new_employees):
+#     l = len(list(j))
+#     if l > 1:
+#         if l > maxi:
+#             maxi = l
+#             maxx = i
+#
+# if maxi > 1:
+#     print(f"{maxx}: {maxi}")
+# else:
+#     print("hamma oyda bittadan tug'ilgan kun ")
+
+2-misol--------------------------------------------------------------------------------------------
+
+import os
+
+dir_c = {}
+
+for item in os.listdir("."):
+    if os.path.isdir(item):
+        files = os.listdir(item)
+        dir_c[item] = len(files)
+        
+max_dir = max(dir_c, key=dir_c.get)
+print(f"eng ko;p faylli papka:{max_dir}, fayllar soni:{dir_c[max_dir]}")
+
+
+3-misol-----------------------------------------------------------------------------------------------------
+
+import json
+from datetime import datetime
+def decorator(func):
+    def wrapper(*args, **kwargs):
+        function_name = {
+                "name": func.__name__,
+                "call_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            }
+        with open("function_calls.json", "w") as f:
+            json.dump(function_name, f, indent=4)
+        return func(*args, **kwargs)
+    return wrapper
+
+@decorator
+def func1():
+    print("func1")
+@decorator
+def func2():
+    print("func2")
+
+func1()
+func2()
+
+4-misol--------------------------------------------------------------------------------------------------------------------------
+class ATM:
+    def __init__(self,balance=0):
+        self.balance = balance
+        with open("balance.txt","w") as f:
+            f.write(str(self.balance))
+
+    def get_balance(self):
+        with open("balance.txt") as f:
+            balance = int(f.read())
+            print(balance)
+
+    def deposit(self,amount):
+        self.balance += amount
+        with open("balance.txt","w") as f:
+            f.write(str(self.balance))
+
+    def withdraw(self,amount):
+        self.balance -= amount
+        with open("balance.txt","w") as f:
+            f.write(str(self.balance))
+
+user = ATM(balance=100)
+user.deposit(100)
+user.withdraw(100)
+
+5-misol-------------------------------------------------------------------------------------------------------------
+
+#----------------- Universal code ketma-ketin juft sonlar kelsa ham o'chiradi ustoz!!! :)---------
+
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+# 
+#     def __str__(self):
+#         return f"{self.val} -> {self.next}"
+# 
+# class Solution:
+#     def __init__(self):
+#         self.head = None
+#     def delete_even(self) -> None:
+#         dummy = ListNode(0, self.head)
+#         t = self.head
+#         tmp = self.head
+#         while tmp and tmp.next:
+#             if tmp.next.val % 2 == 0:
+#                 tmp = tmp.next
+#             else:
+#                 t.next = tmp.next
+#                 tmp = t.next
+#                 t = t.next
+#         if tmp.val % 2 == 0:
+#             t.next = tmp.next
+#         return self.head.next
+
+

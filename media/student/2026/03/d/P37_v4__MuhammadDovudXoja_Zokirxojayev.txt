@@ -1,0 +1,99 @@
+
+-------4-variant------
+
+1-misol
+
+# class Person:
+#     def __init__(self, name, age):
+#         self.name = name
+#         self.age = age
+#         print(f"{self.name} is {self.age} years old")
+# 
+# 
+# import json
+# 
+# with open("people.json") as f:
+#     people = list(json.load(f))
+#     # people.sort(key=lambda p: p["name"],reverse=True)[:3]
+#     # for person in people:
+#     people = sorted(people, key=lambda p: p["age"], reverse=True)[:3]
+#     for p in people:
+#         Person(p["name"], p["age"])
+
+
+2-misol
+
+# with open("data.txt") as f:
+#     data = "".join(f.readlines())
+#     l = []
+#     for i in data:
+#         if i.isalpha() and i not in l:
+#             l.append(i)
+#     l.sort()
+#     print(l[:5])
+
+
+3-misol
+
+# import csv
+#
+# with open("salary.csv") as cf:
+#     a = 0
+#     reader = list(csv.DictReader(cf))
+#     for i in reader:
+#         a += int(i['salary'])
+#     a /= len(reader)
+#     for i in reader:
+#         if int(i['salary']) > a:
+#             print(i['name'])
+
+
+4-misol
+
+# class Account:
+#     def __init__(self, balance):
+#         self.__balance = balance
+#
+#     @property
+#     def balance(self):
+#             return self.__balance
+#
+#     @balance.setter
+#     def balance(self, value):
+#             self.__balance = value
+#
+#     def deposit(self, amount):
+#         self.__balance += amount
+#
+#     def withdraw(self, amount):
+#         self.__balance -= amount
+#
+#     def get_balance(self):
+#         return self.__balance
+#
+#
+# client = Account(100_000)
+# client.deposit(15_000)
+# client.withdraw(10_000)
+# client.deposit(100_000)
+# client.deposit(100_000)
+# client.deposit(100_000)
+# client.deposit(100_000)
+# client.withdraw(100_000)
+# client.withdraw(100_000)
+# client.deposit(15_000)
+# client.withdraw(46_000)
+# print(client.balance)
+
+5-misol
+
+# import json
+# with open('file.json') as file:
+#     data = json.load(file)
+#     general = 0
+#     for i in data.values():
+#         for j in i:
+#               general += j["price"] * j["count"]
+#     print(general)
+
+
