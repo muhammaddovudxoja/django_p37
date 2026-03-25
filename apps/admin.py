@@ -131,7 +131,7 @@ from django.contrib import admin
 from django.contrib.auth.models import User, Group
 from django.db.models import Count
 
-from apps.models import Product, Category, Tag, ProductImage
+from apps.models import Product, Category, Tag, ProductImage, Review
 
 
 class ProductImageStackedInline(admin.StackedInline):
@@ -139,12 +139,17 @@ class ProductImageStackedInline(admin.StackedInline):
     min_num = 1
     extra = 0
 
+class ReviewModelAdmin(admin.StackedInline):
+    model = Review
+    min_num = 0
+    extra = 0
+
 
 @admin.register(Product)
 class ProductModelAdmin(admin.ModelAdmin):
     list_display = 'name', 'category', 'price'
     filter_horizontal = 'tags',
-    inlines = ProductImageStackedInline,
+    inlines = [ProductImageStackedInline, ReviewModelAdmin]
 
 
 @admin.register(Category)
@@ -165,6 +170,9 @@ class CategoryModelAdmin(admin.ModelAdmin):
 @admin.register(Tag)
 class TagModelAdmin(admin.ModelAdmin):
     list_display = 'name',
+
+
+
 
 
 admin.site.unregister(User)

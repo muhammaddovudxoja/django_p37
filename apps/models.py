@@ -1,7 +1,7 @@
 from datetime import timedelta
 
-from django.contrib.auth.models import User
-from django.db.models import Model
+from django.contrib.auth.models import  AbstractUser
+from django.db.models import Model, EmailField
 from django.db.models import Model, CharField, ForeignKey, CASCADE, DecimalField, ImageField, Q, ManyToManyField, \
     JSONField
 from django.db.models.constraints import CheckConstraint
@@ -84,15 +84,32 @@ class Product(Model):
             CheckConstraint(condition=Q(discount__lte=100), name='check_product_price',
                             violation_error_message="Chegirma foizda (0-100 oraliqda bolishi kerak)")
         ]
-
+    def __str__(self):
+        return self.name
 
 class ProductImage(Model):
     image = ImageField(upload_to='products/%Y/%m/%d')
     product = ForeignKey('apps.Product', CASCADE, related_name='images')
 
+    def __str__(self):
+        return self.product.name
 
 class Review(Model):
     title = CharField(max_length=255)
     comment = TextField()
+    product = ForeignKey('apps.Product', CASCADE, related_name='reviews')
     author = ForeignKey('auth.User', CASCADE, related_name='reviews')
     created_at = DateTimeField(auto_now=True)
+
+
+
+class Test(Model):
+    name = CharField(max_length=255)
+    email = EmailField(max_length=255)
+    subject = TextField(max_length=255)
+    message = TextField()
+
+class User(AbstractUser):
+
+    pass
+
