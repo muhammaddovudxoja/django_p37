@@ -96,7 +96,8 @@
                                 <div><a class="btn btn-sm btn-falcon-default mr-2" href="#!"
                                         data-toggle="tooltip" data-placement="top"
                                         title="Add to Wish List"><span class="far fa-heart"></span></a><a
-                                        class="btn btn-sm btn-falcon-default" href="#!" data-toggle="tooltip"
+                                        class="btn btn-sm btn-falcon-default" href="{% url 'add_to_cart' product.pk %}"
+                                        data-toggle="tooltip"
                                         data-placement="top" title="Add to Cart"><span
                                         class="fas fa-cart-plus"></span></a></div>
                             </div>
@@ -107,15 +108,34 @@
         </div>
         <div class="card-footer bg-light d-flex justify-content-center">
             <div>
-                <button class="btn btn-falcon-default btn-sm mr-2" type="button" disabled data-toggle="tooltip"
-                        data-placement="top" title="Prev"><span class="fas fa-chevron-left"></span></button>
-                <a class="btn btn-sm btn-falcon-default text-primary mr-2" href="#!">1</a><a
-                    class="btn btn-sm btn-falcon-default mr-2" href="#!">2</a><a
-                    class="btn btn-sm btn-falcon-default mr-2" href="#!"> <span
-                    class="fas fa-ellipsis-h"></span></a><a class="btn btn-sm btn-falcon-default mr-2"
-                                                            href="#!">35</a>
-                <button class="btn btn-falcon-default btn-sm" type="button" data-toggle="tooltip"
-                        data-placement="top" title="Next"><span class="fas fa-chevron-right"></span></button>
+                {% if page_obj.has_previous %}
+                    <a href="{% url 'product_list_page' %}?page={{ page_obj.previous_page_number }}">
+                        <button class="btn btn-falcon-default btn-sm mr-2" type="button" data-toggle="tooltip"
+                                data-placement="top" title="Prev">
+                            <span class="fas fa-chevron-left"></span>
+                        </button>
+                    </a>
+                {% endif %}
+
+                {% for i in page_obj.paginator.page_range %}
+                    {% if page_obj.number|add:'-1' <= i and i <= page_obj.number|add:'1' %}
+                        {% if page_obj.number == i %}
+                            <a class="btn btn-sm btn-falcon-default text-primary mr-2 disabled"
+                               href="{% url 'product_list_page' %}?page={{ i }}">{{ i }}</a>
+                        {% else %}
+                        <a class="btn btn-sm btn-falcon-default text-primary mr-2"
+                           href="{% url 'product_list_page' %}?page={{ i }}">{{ i }}</a>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    <a href="{% url 'product_list_page' %}?page={{ page_obj.next_page_number }}">
+                        <button class="btn btn-falcon-default btn-sm" type="button" data-toggle="tooltip"
+                                data-placement="top" title="Next">
+                            <span class="fas fa-chevron-right"></span>
+                        </button>
+                    </a>
+                {% endif %}
             </div>
         </div>
     </div>

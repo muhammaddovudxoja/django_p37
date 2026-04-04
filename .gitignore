@@ -1,4 +1,3 @@
-
 .venv
 ### VirtualEnv template
 # Virtualenv
@@ -24,7 +23,6 @@ __pycache__/
 *.so
 
 # Distribution / packaging
-.Python
 build/
 develop-eggs/
 dist/

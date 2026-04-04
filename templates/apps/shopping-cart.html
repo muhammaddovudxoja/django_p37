@@ -1,0 +1,99 @@
+{% extends 'apps/base.html' %}
+{% load static %}
+{% block title %}
+    Cart-Page
+{% endblock %}
+{% block main_content %}
+    <div class="card">
+        <div class="card-header">
+            <div class="row justify-content-between">
+                <div class="col-md-auto">
+                    <h5 class="mb-3 mb-md-0">Shopping Cart ({{ user.carts.count }} Items)</h5>
+                </div>
+                <div class="col-md-auto"><a class="btn btn-sm btn-outline-secondary border-300 mr-2"
+                                            href="{% url 'product_list_page' %}"> <span class="fas fa-chevron-left mr-1"
+                                                                                        data-fa-transform="shrink-4"></span>Continue
+                    Shopping</a><a class="btn btn-sm btn-primary" href="{% url 'checkout_page' %}">Checkout</a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <div class="row bg-200 text-900 no-gutters px-1 fs--1 font-weight-semi-bold">
+                <div class="col-9 col-md-8 p-2 px-md-3">Name</div>
+                <div class="col-3 col-md-4 px-3">
+                    <div class="row">
+                        <div class="col-md-8 py-2 d-none d-md-block text-center">Quantity</div>
+                        <div class="col-12 col-md-4 text-right p-2 px-md-3">Price</div>
+                    </div>
+                </div>
+            </div>
+            {% for cart in carts %}
+            <div class="row no-gutters align-items-center px-1 border-bottom border-200">
+                <div class="col-8 py-3 px-2 px-md-3">
+                    <div class="media align-items-center"><a href="{% url 'product_detail_page' cart.product.pk %}">
+                        <img class="rounded mr-3 d-none d-md-block"
+                             src="{{ cart.product.images.first.image.url }}"
+                             alt=""
+                             width="60"/></a>
+                        <div class="media-body">
+                            <h5 class="fs-0">
+                                <a class="text-900" href="{% url 'product_detail_page' cart.product.pk %}">
+                                    {{ cart.product.name }}
+                                </a>
+                            </h5>
+                            <div class="fs--2 fs-md--1"><a class="text-danger" href="{% url 'remove_cart' cart.pk %}">Remove</a></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4 p-3">
+                    <div class="row">
+                        <div class="col-md-8 d-flex justify-content-end justify-content-md-center px-2 px-md-3 order-1 order-md-0">
+                            <div>
+                                <div class="input-group input-group-sm">
+{#                                    <div class="input-group-prepend">#}
+{#                                        <button class="btn btn-sm btn-outline-secondary border-300 px-2"#}
+{#                                                data-field="input-quantity" data-type="minus">-#}
+{#                                        </button>#}
+{#                                    </div>#}
+                                    <input class="form-control text-center px-2 input-quantity input-spin-none"
+                                           type="number" min="1" value="{{ cart.quantity }}" disabled aria-label="Amount (to the nearest dollar)"
+                                           style="max-width: 40px"/>
+{#                                    <div class="input-group-append">#}
+{#                                        <button class="btn btn-sm btn-outline-secondary border-300 px-2"#}
+{#                                                data-field="input-quantity" data-type="plus">+#}
+{#                                        </button>#}
+{#                                    </div>#}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-right pl-0 pr-2 pr-md-3 order-0 order-md-1 mb-2 mb-md-0 text-600">
+                            ${{ cart.product.current_price }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            <div class="row font-weight-bold px-1">
+                <div class="col-9 col-md-8 py-2 py-0 px-md-3 text-right text-900">Total</div>
+                <div class="col px-3">
+                    <div class="row no-gutters">
+                        <div class="col-md-8 py-2 d-none d-md-block text-center">{{ total_count }} (items)</div>
+                        <div class="col-12 col-md-4 text-right py-2 pr-md-3 pl-0">${{ total_price }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer bg-light d-flex justify-content-end">
+            <form class="mr-3">
+                <div class="input-group input-group-sm">
+                    <input class="form-control" type="text" placeholder="Promocode"/>
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary border-300 btn-sm" type="submit">Apply</button>
+                    </div>
+                </div>
+            </form>
+            <a class="btn btn-sm btn-primary" href="../e-commerce/checkout.html">Checkout</a>
+        </div>
+    </div>
+{% endblock %}
+

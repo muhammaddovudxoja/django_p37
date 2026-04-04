@@ -1,14 +1,16 @@
 from django.urls import path
 
-from apps.views import product_list_page, product_detail_page, user_login_page, user_register_page, test_page, \
-    logout_page
+from apps.views import ProductListView, ProductDetailView, CustomLoginView, \
+    CustomLogoutView, RegisterCreateView, ShoppingCartListView, CheckoutListView, AddCartView, RemoveCartView
 
 urlpatterns = [
-    path('', product_list_page, name='product_list_page'),
-    path('product-detail/<int:pk>', product_detail_page, name='product_detail_page'),
-    path("login", user_login_page, name='user_login_page'),
-    path("register", user_register_page, name='user_register_page'),
-    path("test", test_page, name='test_page'),
-    path("logout", logout_page, name='logout_page'),
-    # path('', ProductGridView.as_view(), name='grid_page'),
+    path('', ProductListView.as_view(), name='product_list_page'),
+    path('product-detail/<int:pk>', ProductDetailView.as_view(), name='product_detail_page'),
+    path("login", CustomLoginView.as_view(), name='login_page'),
+    path("register", RegisterCreateView.as_view(), name='register_page'),
+    path("logout", CustomLogoutView.as_view(), name='logout_page'),
+    path("cart", ShoppingCartListView.as_view(), name='cart_page'),
+    path("checkout", CheckoutListView.as_view(), name='checkout_page'),
+    path("add_to_cart/<int:pk>", AddCartView.as_view(), name='add_to_cart'),
+    path("remove-cart/<int:pk>", RemoveCartView.as_view(), name='remove_cart'),
 ]

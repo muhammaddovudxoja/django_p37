@@ -1,6 +1,7 @@
 from datetime import timedelta
 
-from django.contrib.auth.models import  AbstractUser
+from django.contrib.auth.models import AbstractUser
+from django.db import models
 from django.db.models import Model, EmailField
 from django.db.models import Model, CharField, ForeignKey, CASCADE, DecimalField, ImageField, Q, ManyToManyField, \
     JSONField
@@ -47,8 +48,10 @@ class Category(Model):
     class Meta:
         verbose_name_plural = 'Categories'
 
+
 class Tag(Model):
     name = CharField(max_length=255)
+
     def __str__(self):
         return self.name
 
@@ -60,7 +63,7 @@ class Product(Model):
     specification = JSONField(default=dict)
     price = DecimalField(max_digits=10, decimal_places=2)
     discount = PositiveSmallIntegerField(default=0, help_text='Chegirma (% foizda)')
-    tags = ManyToManyField('apps.Tag',blank=True, related_name='product_tags')
+    tags = ManyToManyField('apps.Tag', blank=True, related_name='product_tags')
     shipping_cost = PositiveIntegerField(default=0)
     like_count = PositiveIntegerField(default=0)
 
@@ -84,8 +87,10 @@ class Product(Model):
             CheckConstraint(condition=Q(discount__lte=100), name='check_product_price',
                             violation_error_message="Chegirma foizda (0-100 oraliqda bolishi kerak)")
         ]
+
     def __str__(self):
         return self.name
+
 
 class ProductImage(Model):
     image = ImageField(upload_to='products/%Y/%m/%d')
@@ -93,6 +98,7 @@ class ProductImage(Model):
 
     def __str__(self):
         return self.product.name
+
 
 class Review(Model):
     title = CharField(max_length=255)
@@ -102,14 +108,10 @@ class Review(Model):
     created_at = DateTimeField(auto_now=True)
 
 
+class Cart(Model):
+    user = ForeignKey('auth.User', CASCADE, related_name='carts')
+    product = ForeignKey('apps.Product', CASCADE, related_name='carts')
+    quantity = PositiveIntegerField(default=1)
 
-class Test(Model):
-    name = CharField(max_length=255)
-    email = EmailField(max_length=255)
-    subject = TextField(max_length=255)
-    message = TextField()
-
-class User(AbstractUser):
-
-    pass
-
+    class Meta:
+        unique_together = (('user', 'product'),)
