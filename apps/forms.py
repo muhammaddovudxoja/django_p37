@@ -4,6 +4,8 @@ from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 from django.forms.fields import CharField
 
+from apps.models import Todo
+
 
 class RegisterUserModelForm(ModelForm):
     password1 = CharField(max_length=50)
@@ -27,5 +29,15 @@ class RegisterUserModelForm(ModelForm):
         user.set_password(self.cleaned_data['password1'])
         user.save()
         return user
+
+class TodoUpdateListForm(ModelForm):
+    class Meta:
+        model = Todo
+        fields = ('title', 'completed')
+
+
+
+
+
 
 

@@ -8,10 +8,10 @@ from django.http import HttpResponseRedirect, request
 from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import ListView, DetailView, CreateView, TemplateView
+from django.views.generic import ListView, DetailView, CreateView, TemplateView, UpdateView
 
-from apps.forms import RegisterUserModelForm
-from apps.models import Product, Cart, Category
+from apps.forms import RegisterUserModelForm, TodoUpdateListForm
+from apps.models import Product, Cart, Category, Todo
 from root.settings import EMAIL_HOST_USER
 
 
@@ -120,14 +120,32 @@ class RemoveCartView(LoginRequiredMixin, View):
         return redirect('cart_page')
 
 
+class TodoListView(ListView):
+    template_name = "apps/todo.html"
+    queryset = Todo.objects.all()
+    context_object_name = "todos"
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if _search := self.request.GET.get("search"):
+            qs = qs.filter(Q(title__icontains=_search))
+        return qs
+
+class TodoDetailView(DetailView):
+    queryset = Todo.objects.all()
+    template_name = "apps/todo_detail.html"
+    context_object_name = "todo"
 
 
+class RemoveTodo(View):
+    def get(self, request, pk, *args, **kwargs):
+        Todo.objects.filter(id=pk).delete()
+        return redirect("todo_page")
 
 
-
-
-
-
+class UpdateTodo(UpdateView):
+    queryset = Todo.objects.all()
+    form_class = TodoUpdateListForm
 
 
 # def test_page(request):
