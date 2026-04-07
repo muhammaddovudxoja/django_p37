@@ -2,6 +2,7 @@ from django.contrib.auth import logout, login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
+from django.core.mail import send_mail
 from django.db.models import F, Q
 from django.http import HttpResponseRedirect, request
 from django.shortcuts import redirect, get_object_or_404
@@ -11,6 +12,7 @@ from django.views.generic import ListView, DetailView, CreateView, TemplateView
 
 from apps.forms import RegisterUserModelForm
 from apps.models import Product, Cart, Category
+from root.settings import EMAIL_HOST_USER
 
 
 class CategoryMixin:
@@ -24,7 +26,7 @@ class ProductListView(CategoryMixin, ListView):
     template_name = "apps/product-grid.html"
     queryset = Product.objects.all()
     context_object_name = "products"
-    paginate_by = 1
+    paginate_by = 3
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -59,6 +61,9 @@ class RegisterCreateView(CreateView):
 
     def form_valid(self, form):
         self.object = form.save()
+        # subject = "Ro'yxatdan o'tish"
+        # message = f"{self.object.first_name}Bizning saytda ro'yxatdan o'tdingiz"
+        # send_mail(subject, message, EMAIL_HOST_USER, [self.object.email])
         login(self.request, self.object)
         return HttpResponseRedirect(self.get_success_url())
 
@@ -69,7 +74,7 @@ class CustomLogoutView(View):
         return redirect("product_list_page")
 
 
-class CheckoutListView(ListView):
+class CheckoutListView(CategoryMixin, LoginRequiredMixin, ListView):
     template_name = "apps/checkout.html"
     queryset = Cart.objects.all()
 
@@ -113,7 +118,18 @@ class RemoveCartView(LoginRequiredMixin, View):
     def get(self, request, pk, *args, **kwargs):
         Cart.objects.filter(id=pk).delete()
         return redirect('cart_page')
-#
+
+
+
+
+
+
+
+
+
+
+
+
 # def test_page(request):
 #     if request.method == "POST":
 #         name = request.POST.get("name")
